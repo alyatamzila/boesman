@@ -10,7 +10,7 @@ class PublicController extends Controller
 {
     public function index()
     {
-        $flights = Flight::with('airline')->orderBy('schedule')->get();
+        $flights = Flight::orderBy('schedule', 'asc')->paginate(6);
         $runningText = DB::table('runningtexts')->where('key', 'running_text')->value('value');
 
         return view('public.jadwal', compact('flights', 'runningText'));

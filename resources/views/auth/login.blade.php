@@ -41,7 +41,7 @@
     <div class="col-md-4">
         <div class="card login-card">
             <div class="card-header login-header text-white text-center p-3">
-                <h4 class="mb-0">🔐 Login ke Boesman App</h4>
+                <h4 class="mb-0">FIDS Oesman Sadik Airport</h4>
             </div>
             <div class="card-body p-4">
                 @if (session('error'))

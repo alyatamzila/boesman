@@ -42,6 +42,22 @@
         font-weight: 600;
     }
 
+    .running-text-bar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        color: yellow;
+        font-weight: bold;
+        padding: 5px 0;
+        z-index: 999;
+    }
+
+    .running-text-bar marquee {
+        font-size: 1.1rem;
+    }
+
 </style>
 
 <div class="container text-center mt-5 px-3">
@@ -58,16 +74,12 @@
             </div>
 
             @if ($user->role === 'superadmin')
-                <a href="{{ route('manage.flights') }}" class="btn btn-outline-light mt-4 btn-custom shadow">Kelola Penerbangan ✈️</a>
-                <a href="{{ route('admin.manage') }}" class="btn btn-outline-info mt-3 btn-custom shadow">Kelola Admin 👤</a>
-                <a href="{{ route('admin.runningtexts.edit') }}" class="btn btn-outline-warning mt-3 btn-custom shadow">Edit Running Text 📝</a>
+                <a href="{{ route('manage.flights') }}" class="btn btn-outline-light mt-4 btn-custom shadow">Kelola Penerbangan</a>
+                <a href="{{ route('admin.manage') }}" class="btn btn-outline-info mt-3 btn-custom shadow">Kelola Admin</a>
+                <a href="{{ route('admin.runningtexts.edit') }}" class="btn btn-outline-warning mt-3 btn-custom shadow">Edit Running Text</a>
             @elseif ($user->role === 'admin')
-                <a href="{{ route('flights.create') }}" class="btn btn-outline-light mt-4 btn-custom shadow">Input Data Penerbangan ✈️</a>
-                {{-- <div class="mt-4">
-                    <marquee behavior="scroll" direction="left" scrollamount="6" class="text-warning fw-semibold">
-                        {{ $runningText ?? 'Selamat datang di Sistem Pemantauan Penerbangan Boesman App!' }}
-                    </marquee>
-                </div> --}}
+                <a href="{{ route('manage.flights') }}" class="btn btn-outline-light mt-4 btn-custom shadow">Kelola Penerbangan</a>
+                {{-- <a href="{{ route(name: 'flights.create') }}" class="btn btn-outline-light mt-4 btn-custom shadow">Kelola Penerbangan</a> --}}
             @endif
 
             <form action="{{ route('logout') }}" method="POST" class="mt-3">
@@ -78,9 +90,8 @@
     </div>
 </div>
 
-{{-- Running Text --}}
-<div class="mt-5 p-2 bg-dark text-white rounded shadow-sm">
-    <marquee behavior="scroll" direction="left">
+<div class="running-text-bar">
+    <marquee behavior="scroll" direction="left" scrollamount="6">
         {{ DB::table('runningtexts')->where('key', 'running_text')->value('value') }}
     </marquee>
 </div>

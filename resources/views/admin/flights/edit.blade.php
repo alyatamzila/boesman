@@ -50,7 +50,7 @@
 
 <div class="container mt-5">
     <div class="glass-card">
-        <h3 class="mb-4">🛬 Edit Data Penerbangan</h3>
+        <h3 class="mb-4">Edit Data Penerbangan</h3>
 
         <form method="POST" action="{{ route('flights.update', $flight->id) }}" enctype="multipart/form-data">
             @csrf
@@ -63,12 +63,20 @@
                     <img src="{{ asset('storage/' . $flight->logo) }}" width="100" class="mb-2 rounded shadow-sm">
                 @endif
                 <input type="file" name="logo" id="logo" class="form-control">
+                <img id="preview-logo" class="mt-3 rounded" style="max-height: 100px; display: none;">
+                @error('logo')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
             </div>
 
             {{-- Flight No --}}
             <div class="mb-3">
                 <label for="flight_no" class="form-label">Flight No</label>
-                <input type="text" name="flight_no" id="flight_no" class="form-control" value="{{ $flight->flight_no }}" required>
+                <input type="text" name="flight_no" id="flight_no" class="form-control"
+                       value="{{ $flight->flight_no }}" placeholder="Contoh: GA123" required>
+                @error('flight_no')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
             </div>
 
             {{-- Schedule --}}
@@ -76,24 +84,55 @@
                 <label for="schedule" class="form-label">Schedule</label>
                 <input type="datetime-local" name="schedule" id="schedule" class="form-control"
                        value="{{ date('Y-m-d\TH:i', strtotime($flight->schedule)) }}" required>
+                @error('schedule')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
             </div>
 
             {{-- Destinasi --}}
             <div class="mb-3">
                 <label for="destinasi" class="form-label">Destinasi</label>
-                <select name="destinasi" id="destinasi" class="form-control">
-                    <option value="ternate" {{ $flight->destinasi == 'ternate' ? 'selected' : '' }}>Ternate</option>
-                    <option value="manado" {{ $flight->destinasi == 'manado' ? 'selected' : '' }}>Manado</option>
-                    <option value="pusat" {{ $flight->destinasi == 'pusat' ? 'selected' : '' }}>Kunjungan dari Pusat</option>
+                <select name="destinasi" id="destinasi" class="form-control" required>
+                    <option value="ternate" {{ old('destinasi') == 'ternate' ? 'selected' : '' }}>Ternate</option>
+                    <option value="labuha" {{ old('destinasi') == 'labuha' ? 'selected' : '' }}>Labuha</option>
+                    <option value="manado" {{ old('destinasi') == 'manado' ? 'selected' : '' }}>Manado</option>
                 </select>
+                @error('destinasi')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
+            </div>
+
+            {{-- Status --}}
+            <div class="mb-3">
+                <label for="status" class="form-label">Status</label>
+                <select name="status" id="status" class="form-control" required>
+                    <option value="on-schedule" {{ $flight->status == 'on-schedule' ? 'selected' : '' }}>On-Schedule</option>
+                    <option value="check-in" {{ $flight->status == 'check-in' ? 'selected' : '' }}>Check-in</option>
+                    <option value="boarding" {{ $flight->status == 'boarding' ? 'selected' : '' }}>Boarding</option>
+                    <option value="cancel" {{ $flight->status == 'cancel' ? 'selected' : '' }}>Cancel</option>
+                    <option value="delayed" {{ old('status') == 'delayed' ? 'selected' : '' }}>Delayed</option>
+                </select>
+                @error('status')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
             </div>
 
             {{-- Tombol Aksi --}}
-            <button type="submit" class="btn btn-primary mt-3">💾 Update</button>
-            <a href="{{ route('manage.flights') }}" class="btn btn-secondary mt-3 btn-rounded">
-                Kembali
-            </a>
+            <button type="submit" class="btn btn-primary mt-3">Update</button>
+            <a href="{{ route('manage.flights') }}" class="btn btn-secondary mt-3 btn-rounded">Kembali</a>
         </form>
     </div>
 </div>
+
+<script>
+    document.getElementById('logo').addEventListener('change', function (e) {
+        const [file] = e.target.files;
+        if (file) {
+            const preview = document.getElementById('preview-logo');
+            preview.src = URL.createObjectURL(file);
+            preview.style.display = 'block';
+        }
+    });
+</script>
+
 @endsection

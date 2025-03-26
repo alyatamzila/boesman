@@ -45,7 +45,7 @@
     }
 
     .btn {
-        border-radius: 30px;
+        border-radius: 5px;
         font-weight: 500;
     }
 
@@ -59,7 +59,7 @@
 <div class="container mt-5">
     <div class="glass-card">
 
-        <h3 class="mb-4">👨🏻‍💻Tambah Admin Baru</h3>
+        <h3 class="mb-4">Tambah Admin Baru</h3>
 
         @if ($errors->any())
             <div class="alert alert-danger">
@@ -82,7 +82,7 @@
 
             <div class="mb-3">
                 <label for="email" class="form-label">Email Admin</label>
-                <input type="email" name="email" id="email" class="form-control" required value="{{ old('email') }}" placeholder="contoh@email.com">
+                <input type="email" name="email" id="email" class="form-control" required value="{{ old('email') }}" placeholder="contoh@gmail.com">
             </div>
 
             <div class="mb-3">
@@ -92,10 +92,10 @@
 
             <div class="mb-3">
                 <label for="password_confirmation" class="form-label">Konfirmasi Password</label>
-                <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" required>
+                <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" required placeholder="Konfirmasi Password">
             </div>
 
-            <button type="submit" class="btn btn-success px-4">💾 Simpan</button>
+            <button type="submit" class="btn btn-success px-4">Simpan</button>
             <a href="{{ route('admin.index') }}" class="btn btn-secondary px-4">Kembali</a>
         </form>
     </div>

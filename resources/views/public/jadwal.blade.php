@@ -1,76 +1,171 @@
 @extends('layouts.app')
 
 @section('content')
+
+{{-- Google Font --}}
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
 <style>
     body {
         font-family: 'Poppins', sans-serif;
     }
-    .glass {
+
+    .glass-card {
         background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        border-radius: 1rem;
-        padding: 2rem;
+        backdrop-filter: blur(12px);
+        border-radius: 20px;
+        padding: 2.5rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+        color: #ffffff;
+    }
+
+    .table {
+        background-color: transparent;
+    }
+
+    .table thead {
+        background-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .table th,
+    .table td {
+        color: #ffffff;
+        background-color: transparent;
+        vertical-align: middle;
+    }
+
+    .table tbody tr {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-rounded {
+        border-radius: 25px;
+        padding: 10px 25px;
+        font-weight: 500;
+    }
+
+    .form-title {
+        font-weight: bold;
+        font-size: 1.8rem;
+        margin-bottom: 1.5rem;
         color: #fff;
     }
-    .table thead {
-        background-color: rgba(255, 255, 255, 0.2);
-        color: #070707;
+
+    .table-wrapper {
+        overflow-x: auto;
     }
-    .table td, .table th {
-        color: #0f0e0e;
-    }
-    .running-text {
-        background: rgba(0, 0, 0, 0.5);
-        color: rgb(247, 247, 244);
-        padding: 5px;
+
+    .running-text-bar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        color: yellow;
         font-weight: bold;
-        font-size: 1.2rem;
-        border-radius: 0.5rem;
+        padding: 5px 0;
+        z-index: 999;
     }
-    .mb-4{
-        font-weight: bold;
+
+    .running-text-bar marquee {
+        font-size: 1.1rem;
     }
 </style>
 
-<div class="container mt-4">
-    <div class="glass">
-        <h3 class="mb-4">🛫 Jadwal Penerbangan Hari Ini</h3>
+<div class="container mt-5">
+    <div class="glass-card">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="form-title">Domestic Depature</h2>
 
-        <div class="table-responsive">
+            <div class="text-end text-white">
+                <div id="realtime-clock" class="fw-semibold" style="font-size: 1rem;"></div>
+                <div id="realtime-date" class="fw-semibold" style="font-size: 1rem;"></div>
+            </div>
+
+            <script>
+                function updateClockAndDate() {
+                    const now = new Date();
+
+                    // Jam
+                    const jam = now.getHours().toString().padStart(2, '0');
+                    const menit = now.getMinutes().toString().padStart(2, '0');
+                    const detik = now.getSeconds().toString().padStart(2, '0');
+                    document.getElementById('realtime-clock').innerText = `${jam}:${menit}:${detik}`;
+
+                    // Tanggal
+                    const options = { day: '2-digit', month: 'long', year: 'numeric' };
+                    const tanggal = now.toLocaleDateString('id-ID', options);
+                    document.getElementById('realtime-date').innerText = tanggal;
+                }
+
+                setInterval(updateClockAndDate, 1000);
+                updateClockAndDate(); // Initial call
+            </script>
+
+        </div>
+        <div class="table-wrapper">
             <table class="table table-bordered text-center">
                 <thead>
                     <tr>
-                        <th>Logo</th>
+                        <th>Schedule</th>
+                        <th>Airline</th>
                         <th>Flight No</th>
-                        <th>Jadwal</th>
+                        <th>Status</th>
                         <th>Destinasi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($flights as $flight)
                         <tr>
+                            {{-- Jadwal --}}
+                            <td>{{ \Carbon\Carbon::parse($flight->schedule)->format('d M Y - H:i') }}</td>
+
+                            {{-- Airline Logo --}}
                             <td>
-                                @if($flight->airline && $flight->airline->logo)
-                                    <img src="{{ asset('storage/' . $flight->airline->logo) }}" width="70">
+                                @if($flight->logo)
+                                    <img src="{{ asset('storage/' . $flight->logo) }}" alt="Logo Airline" style="height: 40px;">
                                 @else
-                                    <span>-</span>
+                                    -
                                 @endif
                             </td>
-                            <td>{{ $flight->flight_no }}</td>
-                            <td>{{ \Carbon\Carbon::parse($flight->schedule)->format('d M Y - H:i') }}</td>
+
+                            {{-- Flight No --}}
+                            <td class="fw-semibold">{{ $flight->flight_no }}</td>
+
+                            {{-- Status --}}
+                            <td>
+                                <span class="badge
+                                    @if($flight->status == 'check-in') bg-info
+                                    @elseif($flight->status == 'boarding') bg-warning
+                                    @elseif($flight->status == 'cancel') bg-danger
+                                    @else bg-success
+                                    @endif
+                                ">
+                                    {{ $flight->status ?? 'On-Schedule' }}
+                                </span>
+                            </td>
+
+                            {{-- Destinasi --}}
                             <td>{{ ucfirst($flight->destinasi) }}</td>
                         </tr>
                     @endforeach
                 </tbody>
+
             </table>
         </div>
     </div>
 
-    {{-- Running Text di bawah --}}
-    <div class="running-text mt-4">
-        <marquee behavior="scroll" direction="left">
-            {{ $runningText ?? 'Selamat datang di jadwal penerbangan kami!' }}
+    <div class="d-flex justify-content-center mt-4">
+        {{ $flights->links('pagination::bootstrap-5') }}
+    </div>
+
+
+    <div class="running-text-bar">
+        <marquee behavior="scroll" direction="left" scrollamount="6">
+            {{ DB::table('runningtexts')->where('key', 'running_text')->value('value') }}
         </marquee>
     </div>
+
 </div>
+
 @endsection

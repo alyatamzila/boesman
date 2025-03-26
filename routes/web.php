@@ -17,6 +17,7 @@ Route::middleware(['role:superadmin'])->group(function () {
     Route::delete('/flights/{id}', [FlightController::class, 'destroy'])->name('flights.destroy');
 
 
+
     Route::resource('/admin', AdminController::class)->except(['show']);
     Route::get('/admin/manage', [AdminController::class, 'index'])->name('admin.manage');
     Route::get('/admin/create', [AdminController::class, 'create'])->name('admin.create');
@@ -35,14 +36,17 @@ Route::middleware(['role:superadmin'])->group(function () {
 Route::middleware(['auth'])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
-
+    Route::get('/manage-flights', [FlightController::class, 'index'])->name('manage.flights');
     Route::get('/flights/create', [FlightController::class, 'create'])->name('flights.create');
     Route::post('/flights', [FlightController::class, 'store'])->name('flights.store');
-
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/flights/{id}/edit', [FlightController::class, 'edit'])->name('flights.edit');
+    Route::put('/flights/{id}', [FlightController::class, 'update'])->name('flights.update');
+    Route::delete('/flights/{id}', [FlightController::class, 'destroy'])->name('flights.destroy');
 });
 
-Route::get('/login', [AuthController::class, 'login'])->name('login')->middleware('guest');
-Route::post('/login', [AuthController::class, 'authenticate']);
+Route::redirect('/', '/login');
+Route::get('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/login', [AuthController::class, 'authenticate'])->name('login');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/jadwal', [PublicController::class, 'index'])->name('public.jadwal');

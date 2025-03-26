@@ -11,7 +11,7 @@ class AdminController extends Controller
     // Tampilkan semua admin
     public function index()
     {
-        $admins = User::where('role', 'admin')->get();
+        $admins = User::where('role', 'admin')->paginate(6);
         return view('admin.index', compact('admins'));
     }
 

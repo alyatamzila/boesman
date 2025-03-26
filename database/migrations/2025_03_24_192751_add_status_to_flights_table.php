@@ -12,15 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('flights', function (Blueprint $table) {
-            $table->foreignId('airline_id')->constrained()->onDelete('cascade');
+            $table->string('status')->nullable()->after('flight_no');
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
         Schema::table('flights', function (Blueprint $table) {
-            $table->dropForeign(['airline_id']);
-            $table->dropColumn('airline_id');
+            //
         });
     }
 };

@@ -4,6 +4,8 @@
 
 {{-- Import Google Font --}}
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
 
 <style>
     body {
@@ -19,14 +21,23 @@
         color: #fff;
     }
 
-    .table thead {
-        background-color: rgba(0, 0, 0, 0.1);
-        color: #0a0707;
+    .table {
+        background-color: transparent;
     }
 
-    .table td, .table th {
+    .table thead {
+        background-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .table th,
+    .table td {
+        color: #ffffff;
+        background-color: transparent;
         vertical-align: middle;
-        color: #0e0808;
+    }
+
+    .table tbody tr {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     }
 
     .btn-primary, .btn-warning, .btn-danger, .btn-secondary {
@@ -38,24 +49,18 @@
 <div class="container mt-5">
     <div class="transparent-card">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="fw-bold">✈️ Daftar Penerbangan</h2>
+            <h2 class="fw-bold">Daftar Penerbangan</h2>
             <a href="{{ route('flights.create') }}" class="btn btn-primary">+ Tambah Penerbangan</a>
         </div>
-
-        {{-- @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show text-dark" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif --}}
 
         <div class="table-responsive">
             <table class="table table-hover table-bordered align-middle text-center">
                 <thead>
                     <tr>
-                        <th>Logo</th>
+                        <th>Schedule</th>
+                        <th>Airline</th>
                         <th>Flight No</th>
-                        <th>Jadwal</th>
+                        <th>Status</th>
                         <th>Destinasi</th>
                         <th>Aksi</th>
                     </tr>
@@ -63,18 +68,37 @@
                 <tbody>
                     @foreach($flights as $flight)
                         <tr>
+                            {{-- Schedule (manual input jadwal saja) --}}
+                            <td>{{ \Carbon\Carbon::parse($flight->schedule)->format('d M Y - H:i') }}</td>
+
+                            {{-- Airline (nama, bukan logo) --}}
                             <td>
-                                @if($flight->airline && $flight->airline->logo)
-                                    <img src="{{ asset('storage/' . $flight->airline->logo) }}" width="80" class="rounded shadow-sm">
-                                @elseif($flight->airline)
-                                    <span class="text-muted">{{ $flight->airline->name }}</span>
+                                @if($flight->logo)
+                                    <img src="{{ asset('storage/' . $flight->logo) }}" alt="Logo Maskapai" style="height: 40px;">
                                 @else
                                     <span class="text-muted">-</span>
                                 @endif
                             </td>
+
                             <td class="fw-semibold">{{ $flight->flight_no }}</td>
-                            <td>{{ \Carbon\Carbon::parse($flight->schedule)->format('d M Y - H:i') }}</td>
+
+                            {{-- Status --}}
+                            <td>
+                                <span class="badge
+                                    @if($flight->status == 'check-in') bg-info
+                                    @elseif($flight->status == 'boarding') bg-warning
+                                    @elseif($flight->status == 'cancel') bg-danger
+                                    @elseif($flight->status == 'delayed') bg-secondary
+                                    @else bg-success
+                                    @endif">
+                                    {{ ucfirst($flight->status ?? 'on-schedule') }}
+                                </span>
+                            </td>
+
+                            {{-- Destinasi --}}
                             <td>{{ ucfirst($flight->destinasi) }}</td>
+
+                            {{-- Aksi --}}
                             <td>
                                 <a href="{{ route('flights.edit', $flight->id) }}" class="btn btn-warning btn-sm me-1">✏️ Edit</a>
                                 <form action="{{ route('flights.destroy', $flight->id) }}" method="POST" class="d-inline">
@@ -87,6 +111,9 @@
                     @endforeach
                 </tbody>
             </table>
+            <div class="d-flex justify-content-center mt-4">
+                {{ $flights->links('pagination::bootstrap-5') }}
+            </div>
         </div>
 
         {{-- Tombol Kembali --}}
@@ -95,4 +122,6 @@
         </div>
     </div>
 </div>
+
+
 @endsection

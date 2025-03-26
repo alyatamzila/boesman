@@ -17,13 +17,23 @@
         padding: 2rem;
         color: #fff;
     }
-    .table thead {
-        background-color: rgba(0, 0, 0, 0.1);
-        color: #0a0707;
+    .table {
+        background-color: transparent;
     }
-    .table td, .table th {
+
+    .table thead {
+        background-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .table th,
+    .table td {
+        color: #ffffff;
+        background-color: transparent;
         vertical-align: middle;
-        color: #0e0808;
+    }
+
+    .table tbody tr {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     }
     .btn-primary, .btn-warning, .btn-danger, .btn-secondary {
         border-radius: 25px;
@@ -34,7 +44,7 @@
 <div class="container mt-5">
     <div class="transparent-card">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="fw-bold">👨🏻‍💻 Daftar Admin</h2>
+            <h2 class="fw-bold">Daftar Admin</h2>
             <a href="{{ route('admin.create') }}" class="btn btn-primary">+ Tambah Admin</a>
         </div>
 
@@ -64,13 +74,16 @@
                                 <form action="{{ route('admin.destroy', $admin->id) }}" method="POST" class="d-inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?')">🗑️ Hapus</button>
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?')">🗑️Hapus</button>
                                 </form>
                             </td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
+            <div class="d-flex justify-content-center mt-4">
+                {{ $admins->links('pagination::bootstrap-5') }}
+            </div>
         </div>
         {{-- Tombol Kembali --}}
         <div class="mt-4">

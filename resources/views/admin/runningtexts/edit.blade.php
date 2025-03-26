@@ -25,7 +25,7 @@
         border-radius: 12px;
     }
     .btn-rounded {
-        border-radius: 25px;
+        border-radius: 5px;
         padding: 10px 25px;
         font-weight: 500;
     }
@@ -35,26 +35,35 @@
         margin-bottom: 1.5rem;
         color: #fff;
     }
+    .form-control {
+        background-color: rgba(255, 255, 255, 0.2);
+        border: none;
+        color: #fff;
+    }
+    .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.8);
+    }
+    .form-control:focus {
+        background-color: rgba(255, 255, 255, 0.3);
+        color: #fff;
+    }
+    .form-control option {
+        color: #000;
+        background-color: #fff;
+    }
 </style>
 
 <div class="container mt-5 d-flex justify-content-center">
     <div class="col-md-8">
         <div class="glass-card">
-            <h2 class="form-title text-center">✏️ Edit Running Text</h2>
-
-            {{-- @if(session('success'))
-                <div class="alert alert-success text-dark alert-dismissible fade show" role="alert">
-                    {{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            @endif --}}
+            <h2 class="form-title text-center">Edit Running Text</h2>
 
             <form action="{{ route('admin.runningtexts.update') }}" method="POST">
                 @csrf
                 @method('PUT')
 
                 <div class="mb-4">
-                    <label for="value" class="form-label">📝 Teks Berjalan</label>
+                    <label for="value" class="form-label">Teks Berjalan</label>
                     <input type="text" name="value" id="value" class="form-control"
                         placeholder="Masukkan teks berjalan..."
                         value="{{ old('value', $runningText) }}" required>
@@ -62,7 +71,7 @@
 
                 <div class="d-flex justify-content-between">
                     <button type="submit" class="btn btn-success btn-rounded">
-                        💾 Simpan
+                        Simpan
                     </button>
                     <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary btn-rounded">
                         Kembali
