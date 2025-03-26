@@ -63,15 +63,15 @@
         <form method="POST" action="{{ route('flights.store') }}" enctype="multipart/form-data">
             @csrf
 
-            {{-- Jadwal Manual --}}
+            {{-- Scedule --}}
             <div class="mb-3">
-                <label for="schedule" class="form-label">Jadwal</label>
+                <label for="schedule" class="form-label">Schedule</label>
                 <input type="datetime-local" name="schedule" id="schedule" class="form-control" required value="{{ old('schedule') }}">
             </div>
 
             {{-- Logo Maskapai --}}
             <div class="mb-3">
-                <label for="logo" class="form-label">Logo Maskapai</label>
+                <label for="logo" class="form-label">Airline</label>
                 <input type="file" name="logo" id="logo" class="form-control" accept="image/*" required onchange="previewLogo(event)">
                 <img id="logo-preview" src="#" alt="Preview Logo">
             </div>

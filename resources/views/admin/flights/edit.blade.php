@@ -56,9 +56,20 @@
             @csrf
             @method('PUT')
 
+
+            {{-- Schedule --}}
+            <div class="mb-3">
+                <label for="schedule" class="form-label">Schedule</label>
+                <input type="datetime-local" name="schedule" id="schedule" class="form-control"
+                       value="{{ date('Y-m-d\TH:i', strtotime($flight->schedule)) }}" required>
+                @error('schedule')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
+            </div>
+
             {{-- Logo --}}
             <div class="mb-3">
-                <label for="logo" class="form-label">Logo Maskapai</label><br>
+                <label for="logo" class="form-label">Airline</label><br>
                 @if($flight->logo)
                     <img src="{{ asset('storage/' . $flight->logo) }}" width="100" class="mb-2 rounded shadow-sm">
                 @endif
@@ -79,12 +90,17 @@
                 @enderror
             </div>
 
-            {{-- Schedule --}}
+            {{-- Status --}}
             <div class="mb-3">
-                <label for="schedule" class="form-label">Schedule</label>
-                <input type="datetime-local" name="schedule" id="schedule" class="form-control"
-                       value="{{ date('Y-m-d\TH:i', strtotime($flight->schedule)) }}" required>
-                @error('schedule')
+                <label for="status" class="form-label">Status</label>
+                <select name="status" id="status" class="form-control" required>
+                    <option value="on-schedule" {{ $flight->status == 'on-schedule' ? 'selected' : '' }}>On-Schedule</option>
+                    <option value="check-in" {{ $flight->status == 'check-in' ? 'selected' : '' }}>Check-in</option>
+                    <option value="boarding" {{ $flight->status == 'boarding' ? 'selected' : '' }}>Boarding</option>
+                    <option value="cancel" {{ $flight->status == 'cancel' ? 'selected' : '' }}>Cancel</option>
+                    <option value="delayed" {{ old('status') == 'delayed' ? 'selected' : '' }}>Delayed</option>
+                </select>
+                @error('status')
                     <small class="text-danger">{{ $message }}</small>
                 @enderror
             </div>
@@ -98,21 +114,6 @@
                     <option value="manado" {{ old('destinasi') == 'manado' ? 'selected' : '' }}>Manado</option>
                 </select>
                 @error('destinasi')
-                    <small class="text-danger">{{ $message }}</small>
-                @enderror
-            </div>
-
-            {{-- Status --}}
-            <div class="mb-3">
-                <label for="status" class="form-label">Status</label>
-                <select name="status" id="status" class="form-control" required>
-                    <option value="on-schedule" {{ $flight->status == 'on-schedule' ? 'selected' : '' }}>On-Schedule</option>
-                    <option value="check-in" {{ $flight->status == 'check-in' ? 'selected' : '' }}>Check-in</option>
-                    <option value="boarding" {{ $flight->status == 'boarding' ? 'selected' : '' }}>Boarding</option>
-                    <option value="cancel" {{ $flight->status == 'cancel' ? 'selected' : '' }}>Cancel</option>
-                    <option value="delayed" {{ old('status') == 'delayed' ? 'selected' : '' }}>Delayed</option>
-                </select>
-                @error('status')
                     <small class="text-danger">{{ $message }}</small>
                 @enderror
             </div>
