@@ -81,7 +81,7 @@
 
         {{-- Logo Kiri dan Kanan di atas card --}}
         <div class="d-flex justify-content-between align-items-center mb-3 px-3">
-            <img src="{{ asset('images/70.png') }}" alt="Logo Kiri" class="logo-kiri">
+            <img src="{{ asset('images/perhub.png') }}" alt="Logo Kiri" class="logo-kiri">
             <img src="{{ asset('images/71.png') }}" alt="Logo Kanan" class="logo-kanan">
         </div>
 
@@ -110,7 +110,7 @@
         const alerts = document.querySelectorAll('.custom-alert');
         alerts.forEach(alert => {
             alert.classList.add('hide');
-            setTimeout(() => alert.remove(), 500); // tunggu animasi selesai
+            setTimeout(() => alert.remove(), 500);
         });
     }, 500);
 </script>

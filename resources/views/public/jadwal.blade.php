@@ -75,7 +75,7 @@
 <div class="container mt-5">
     <div class="glass-card">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="form-title">Domestic Depature</h2>
+            <h2 class="form-title">Flight Information</h2>
 
             <div class="text-end text-white">
                 <div id="realtime-clock" class="fw-semibold" style="font-size: 1rem;"></div>
@@ -110,8 +110,8 @@
                         <th>Schedule</th>
                         <th>Airline</th>
                         <th>Flight No</th>
-                        <th>Status</th>
                         <th>Destinasi</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -123,7 +123,7 @@
                             {{-- Airline Logo --}}
                             <td>
                                 @if($flight->logo)
-                                    <img src="{{ asset('storage/' . $flight->logo) }}" alt="Logo Airline" style="height: 40px;">
+                                    <img src="{{ asset('storage/' . $flight->logo) }}" alt="Logo Airline" style="height: 60px;">
                                 @else
                                     -
                                 @endif
@@ -132,21 +132,21 @@
                             {{-- Flight No --}}
                             <td class="fw-semibold">{{ $flight->flight_no }}</td>
 
+                            {{-- Destinasi --}}
+                            <td>{{ ucfirst($flight->destinasi) }}</td>
+
                             {{-- Status --}}
                             <td>
                                 <span class="badge
                                     @if($flight->status == 'check-in') bg-info
                                     @elseif($flight->status == 'boarding') bg-warning
                                     @elseif($flight->status == 'cancel') bg-danger
+                                    @elseif($flight->status == 'delayed') bg-secondary
                                     @else bg-success
-                                    @endif
-                                ">
-                                    {{ $flight->status ?? 'On-Schedule' }}
+                                    @endif">
+                                    {{ ucfirst($flight->status ?? 'on-schedule') }}
                                 </span>
                             </td>
-
-                            {{-- Destinasi --}}
-                            <td>{{ ucfirst($flight->destinasi) }}</td>
                         </tr>
                     @endforeach
                 </tbody>
