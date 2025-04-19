@@ -24,9 +24,9 @@ class FlightController extends Controller
     {
         $request->validate([
 
-            'status' => 'required|in:on-schedule,check-in,boarding,cancel,delayed',
+            'status' => 'required|in:on-schedule,check-in,boarding,cancel,delayed,to-waiting-room',
             'flight_no' => 'required|string|max:50',
-            'schedule' => 'required|date',
+            'schedule' => 'required|date_format:H:i',
             'logo' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
             'destinasi' => 'required|in:ternate,labuha,manado',
         ]);
